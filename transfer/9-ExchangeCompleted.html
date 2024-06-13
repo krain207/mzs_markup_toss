@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <!-- <meta name="toss:color-scheme" content="light dark" /> -->
+    <link rel="preconnect" href="https://toss.im" />
+    <link rel="preconnect" href="https://static.toss.im" />
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/others.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/tds.css" />
+    <script src="https://polyfill-fe.toss.im/index.js"></script>
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="preconnect" href="https://assets-fe.toss.im" />
+    <link rel="shortcut icon" href="https://static.toss.im/tds/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://static.toss.im/tds/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://static.toss.im/tds/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="https://static.toss.im/tds/favicon/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="196x196" href="https://static.toss.im/tds/favicon/favicon-196x196.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="https://static.toss.im/tds/favicon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://static.toss.im/tds/favicon/apple-touch-icon-72x72.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-152x152.png"
+    />
+    <meta name="msapplication-TileImage" content="https://static.toss.im/tds/favicon/mstile-144x144.png" />
+    <title>메리츠증권</title>
+    <style>
+      html,
+      body,
+      #root {
+        height: 100%;
+        background: var(--adaptiveBackground);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" />
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+    <script src="../shared/js/toss-app-bridge.js"></script>
+    <script src="../shared/js/toss-utils.js"></script>
+    <script>
+      (function () {
+        window.toss = {
+          // TODO: 닫기 버튼 클릭 핸들러
+          onCancelClick: function () {
+            // 웹뷰를 닫습니다.
+            tossAppBridge.closeWebView();
+          },
+          // TODO: 돈 보내기 클릭 핸들러
+          onButtonClick: function () {
+            // TODO: 토스뱅크로 돈 보내기 화면으로 이동해주세요.
+            window.location.href = '1-Transfer.html';
+          },
+        };
+      })();
+    </script>
+    <script src="./js/9-ExchangeCompleted.js"></script>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="toss:color-scheme" content="light dark" />
+    <link rel="preconnect" href="https://toss.im" />
+    <link rel="preconnect" href="https://static.toss.im" />
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/others.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/tds.css" />
+    <script src="https://polyfill-fe.toss.im/index.js"></script>
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="preconnect" href="https://assets-fe.toss.im" />
+    <link rel="shortcut icon" href="https://static.toss.im/tds/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://static.toss.im/tds/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://static.toss.im/tds/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="https://static.toss.im/tds/favicon/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="196x196" href="https://static.toss.im/tds/favicon/favicon-196x196.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="https://static.toss.im/tds/favicon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://static.toss.im/tds/favicon/apple-touch-icon-72x72.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-152x152.png"
+    />
+    <meta name="msapplication-TileImage" content="https://static.toss.im/tds/favicon/mstile-144x144.png" />
+    <title>메리츠증권</title>
+    <style>
+      html,
+      body,
+      #root {
+        height: 100%;
+        background: var(--adaptiveBackground);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" />
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+    <script src="../shared/js/toss-app-bridge.js"></script>
+    <script src="../shared/js/toss-utils.js"></script>
+    <script>
+      (function () {
+        window.toss = {
+          // 출금 계좌 정보
+          // TODO: 출금 게좌 정보에 적절한 값을 채워주세요.
+          from: {
+            name: '메리츠증권 계좌',
+            corpName: '메리츠증권',
+            accountNumber: '123123123',
+            balance: 82000,
+          },
+          // 입금 계좌 정보
+          // TODO: 입금 게좌 정보에 적절한 값을 채워주세요.
+          to: {
+            name: '토스뱅크',
+            corpName: '토스뱅크',
+            accountNumber: 10013039485,
+          },
+          // 다음 버튼 클릭 이벤트 핸들러
+          // TODO: 다음 버튼 클릭 시 송금 확인 화면으로 연결해주세요.
+          onNextButtonClick: function (params) {
+            // 입력한 금액 (number)
+            var amount = params.amount;
+            // 버튼에 로딩 상태를 설정합니다. 파라미터에 `true`를 넘겨 호출할 경우 로딩 상태로 표시되고, `false`를 넘겨 호출할 경우 로딩 상태가 해제됩니다. (Function)
+            var setLoading = params.setLoading;
+            // 버튼이 2개 있는 버텀싯을 띄웁니다. (Function)
+            var openTwoButtonBottomSheet = params.openTwoButtonBottomSheet;
+
+            // 이체한도 초과 여부
+            // TODO: 이체한도 초과 여부를 알맞게 변경해주세요.
+            var isTransferLimitExceeded = true;
+
+            if (isTransferLimitExceeded) {
+              // 버튼의 로딩 상태를 표시합니다. (필요없다고 판단되면 지우셔도 됩니다.)
+              setLoading(true);
+
+              openTwoButtonBottomSheet({
+                header: '최대 송금한도를 넘었어요',
+                headerDescription: '송금한도 변경은 메리츠증권 앱에서 할 수 있어요.',
+                children: [
+                  { label: { content: '1회 송금한도' }, value: { content: '1억' } },
+                  { label: { content: '1일 송금한도' }, value: { content: '5억' } },
+                  {
+                    label: { content: '오늘 남은 송금한도' },
+                    value: { content: '1,423,231,000원', color: 'rgb(49, 130, 246)' },
+                  },
+                ],
+                leftButton: '닫기',
+                rightButton: '한도 변경하기',
+              }).then(function (action) {
+                if (action === 'rightButtonClick') {
+                  // TODO: 메리츠증권 앱으로 이동합니다.
+                }
+
+                // 버튼의 로딩 상태를 해제합니다. (필요없다고 판단되면 지우셔도 됩니다.)
+                setLoading(false);
+              });
+            } else {
+              window.location.href = './2-TransferConfirm.html';
+            }
+          },
+        };
+      })();
+    </script>
+    <script src="./js/1-Transfer.js"></script>
+  </body>
+</html>

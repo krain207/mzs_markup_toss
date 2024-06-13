@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="toss:color-scheme" content="light dark" />
+    <link rel="preconnect" href="https://toss.im" />
+    <link rel="preconnect" href="https://static.toss.im" />
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://static.toss.im/tps/others.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../shared/css/tds.css" />
+    <script src="https://polyfill-fe.toss.im/index.js"></script>
+    <link rel="preconnect" href="https://polyfill-fe.toss.im" />
+    <link rel="preconnect" href="https://assets-fe.toss.im" />
+    <link rel="shortcut icon" href="https://static.toss.im/tds/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="https://static.toss.im/tds/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="https://static.toss.im/tds/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="https://static.toss.im/tds/favicon/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="196x196" href="https://static.toss.im/tds/favicon/favicon-196x196.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="https://static.toss.im/tds/favicon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="https://static.toss.im/tds/favicon/apple-touch-icon-72x72.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="120x120"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-120x120.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="144x144"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-144x144.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="152x152"
+      href="https://static.toss.im/tds/favicon/apple-touch-icon-152x152.png"
+    />
+    <meta name="msapplication-TileImage" content="https://static.toss.im/tds/favicon/mstile-144x144.png" />
+    <title>메리츠증권</title>
+    <style>
+      html,
+      body,
+      #root {
+        height: 100%;
+        background: var(--adaptiveBackground);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" />
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+    <script src="../shared/js/toss-app-bridge.js"></script>
+    <script src="../shared/js/toss-utils.js"></script>
+    <script>
+      (function () {
+        // TODO: 운영 환경, 개발 환경 여부에 따라 스킴을 동적으로 변경해주세요.
+        var isProductionEnvironment = true;
+
+        var MZS_PRODUCTION_ORIGIN = '';
+        var MZS_DEVELOPMENT_ORIGIN = '';
+        var MZS_ORIGIN = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+
+        var TOSS_BANK_PRODUCTION_ORIGIN = 'https://service.tossbank.com';
+        var TOSS_BANK_DEVELOPMENT_ORIGIN = 'https://service-test.tossbank.com';
+        var TOSS_BANK_ORIGIN = isProductionEnvironment ? TOSS_BANK_PRODUCTION_ORIGIN : TOSS_BANK_DEVELOPMENT_ORIGIN;
+
+        window.toss = {
+          // TODO: 청약 신청한 ELB 데이터를 채워주세요. 없다면 null을 채워주세요. (null | Array<>)
+          subscribedELBList: [
+            {
+              // TODO: 상품의 고유 id를 채워주세요. (number)
+              id: 0,
+              // TODO: 상품 이름을 채워주세요.
+              productName: 'ELB 11호',
+              // TODO: 상품 이미지 url을 채워주세요. (string)
+              iconUrl: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+              // TODO: 남은 시간을 보여줘야 한다면 채워주세요. 이 값이 없으면 appliedAmount 가 노출됩니다.
+              remainingTime: '확정 종료까지 5시간 4분 남음',
+              // TODO: 신청한 금액을 채워주세요. (number)
+              appliedAmount: 150000,
+              // TODO: 확정까지 남은 d-day를 채워주세요. (string | null) buttonEnabled 가 false 일 때 이 값이 노출됩니다.
+              dDay: '확정 D-3',
+              // TODO: 숙려고객 대상 여부를 채워주세요.
+              isConsiderationUser: false,
+              // TODO: 숙려 타입에 대해서 다음에서 선택해서 채워주세요. ('숙려기간'| '확정기간'| '확정당일'| '청약완료' | '비숙려대상')
+              considerationType: '숙려기간',
+              // TODO: 바텀싯 헤더 부분에 노출될 텍스트를 채워주세요.
+              bottomSheetDescription: '청약 완료',
+              // TODO: 바텀싯에 보여줄 정보를 채워주세요.
+              bottomSheetRows: [
+                { label: '금액', value: '150,000원' },
+                { label: '청약기간', value: '2024.06.25 ~ 2024.06.30' },
+                { label: '발행일', value: '2024.06.30' },
+                { label: '만기일', value: '2026.10.14' },
+                { label: '투자수익률(세전)', value: '최고 연3.25%' },
+                { label: '상품위험등급', value: '5등급(낮은위험)' },
+                { label: '기초자산', value: '삼성전자 보통주' },
+              ],
+            },
+            {
+              // TODO: 상품의 고유 id를 채워주세요. (number)
+              id: 1,
+              // TODO: 상품 이름을 채워주세요.
+              productName: 'ELB 제2438회',
+              // TODO: 상품 이미지 url을 채워주세요. (string)
+              iconUrl: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+              // TODO: 남은 시간을 보여줘야 한다면 채워주세요. 이 값이 없으면 appliedAmount 가 노출됩니다.
+              remainingTime: null,
+              // TODO: 신청한 금액을 채워주세요. (number)
+              appliedAmount: 150000,
+              // TODO: 확정까지 남은 d-day를 채워주세요. (string | null) buttonEnabled 가 false 일 때 이 값이 노출됩니다.
+              dDay: '확정 D-3',
+              // TODO: 숙려고객 대상 여부를 채워주세요.
+              isConsiderationUser: false,
+              // TODO: 숙려 타입에 대해서 다음에서 선택해서 채워주세요. ('숙려기간'| '확정기간'| '확정당일'| '청약완료' | '비숙려대상')
+              considerationType: '확정기간',
+              // TODO: 바텀싯 헤더 부분에 노출될 텍스트를 채워주세요.
+              bottomSheetDescription: '청약 완료',
+              // TODO: 바텀싯에 보여줄 정보를 채워주세요.
+              bottomSheetRows: [
+                { label: '금액', value: '150,000원' },
+                { label: '청약기간', value: '2024.06.25 ~ 2024.06.30' },
+                { label: '발행일', value: '2024.06.30' },
+                { label: '만기일', value: '2026.10.14' },
+                { label: '투자수익률(세전)', value: '최고 연3.25%' },
+                { label: '상품위험등급', value: '5등급(낮은위험)' },
+                { label: '기초자산', value: '삼성전자 보통주' },
+              ],
+            },
+            {
+              // TODO: 상품의 고유 id를 채워주세요. (number)
+              id: 2,
+              // TODO: 상품 이름을 채워주세요.
+              productName: 'ELB 11호',
+              // TODO: 상품 이미지 url을 채워주세요. (string)
+              iconUrl: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+              // TODO: 남은 시간을 보여줘야 한다면 채워주세요. 이 값이 없으면 appliedAmount 가 노출됩니다.
+              remainingTime: null,
+              // TODO: 신청한 금액을 채워주세요. (number)
+              appliedAmount: 150000,
+              // TODO: 확정까지 남은 d-day를 채워주세요. (string | null) buttonEnabled 가 false 일 때 이 값이 노출됩니다.
+              dDay: '확정 D-3',
+              // TODO: 숙려고객 대상 여부를 채워주세요.
+              isConsiderationUser: false,
+              // TODO: 숙려 타입에 대해서 다음에서 선택해서 채워주세요. ('숙려기간'| '확정기간'| '확정당일'| '청약완료' | '비숙려대상')
+              considerationType: '확정당일',
+              // TODO: 바텀싯 헤더 부분에 노출될 텍스트를 채워주세요.
+              bottomSheetDescription: '청약 완료',
+              // TODO: 바텀싯에 보여줄 정보를 채워주세요.
+              bottomSheetRows: [
+                { label: '금액', value: '150,000원' },
+                { label: '청약기간', value: '2024.06.25 ~ 2024.06.30' },
+                { label: '발행일', value: '2024.06.30' },
+                { label: '만기일', value: '2026.10.14' },
+                { label: '투자수익률(세전)', value: '최고 연3.25%' },
+                { label: '상품위험등급', value: '5등급(낮은위험)' },
+                { label: '기초자산', value: '삼성전자 보통주' },
+              ],
+            },
+          ],
+          // 바텀싯 청약 취소하기 버튼 클릭 이벤트 핸들러
+          onCancelSubscriptionClick: function (params) {
+            // 상품의 고유 id 값
+            var id = params.id;
+            // alert 모달 띄우는 함수
+            var openAlertDialog = params.openAlertDialog;
+            // confirm 모달 띄우는 함수
+            var openConfirmDialog = params.openConfirmDialog;
+            // TODO: 취소가능한 시간 여부를 채워주세요. (boolean)
+            var isCancelPossibleTime = false;
+
+            if (!isCancelPossibleTime) {
+              openAlertDialog({
+                title: '취소할 수 없어요',
+                description:
+                  '청약 취소는 영업일 0:30 ~ ~22:00 사이에 할 수 있어요. 취소할 수 있는 시간에 다시 시도해주세요.',
+              });
+              return;
+            }
+          },
+
+          // TODO: 계좌 번호 (string)
+          accountNumber: '20203-12',
+          // TODO: 배너 텍스트
+          banner: {
+            topText: '더 높은 수익률을 기대한다면',
+            bottomText: '토스뱅크로 돈 보내기',
+            onClick: function () {
+              window.location.href = tossUtils.createSupertossLab(TOSS_BANK_ORIGIN + '/partner-mzs/bill', {
+                pathParams: { referrer: 'MZS' },
+                showBridge: true,
+                bridgeType: 'bank',
+                transparentNavBarType: 'adaptive',
+              });
+            },
+          },
+          // TODO: 계좌 잔액 (number)
+          balance: 13340000,
+          // TODO: 출금 가능 금액 (number)
+          withdrawableAmount: 300000,
+          // 출금가능금액 옆 물음표 클릭 이벤트 핸들러
+          onWithdrawableAmountQuestionMarkClick: function (params) {
+            // 버튼이 한 개인 바텀싯 열기 함수
+            var openOneButtonBottomSheet = params.openOneButtonBottomSheet;
+
+            openOneButtonBottomSheet({
+              header: '출금 가능 금액',
+              headerDescription:
+                '출금 가능 금액은 원화와 달러만 표시 돼요. 유로와 엔화 등 다른나라 통화는 메리츠증권 앱에서 확인할 수 있어요.',
+              // 원화만 있는 경우
+              // headerDescription: '메리츠증권 계좌에 있는 잔고예요.',
+              children: [{ label: '원화', value: '100,000원' }],
+              button: '확인',
+            });
+          },
+          // 토스뱅크로 돈 보내기 클릭 이벤트 핸들러
+          // TODO: 토스뱅크로 돈 보내기를 클릭했을 때 실행할 로직을 이곳에 작성해주세요.
+          onSendButtonClick: function (params) {
+            var openAlertDialog = params.openAlertDialog;
+            var openTwoButtonBottomSheet = params.openTwoButtonBottomSheet;
+
+            // 점검 시간 여부
+            // TODO: 점검 시간 여부에 따라 적절한 값을 넣어주세요.
+            var isInMaintenance = false;
+
+            if (isInMaintenance) {
+              // 점검 시간인 경우, 점검 시간 얼럿을 띄웁니다.
+              openAlertDialog({
+                title: '지금은 점검 시간이에요',
+                description: '메리츠증권 점검이 끝나면 다시 시도해주세요. (23:40~00:10)',
+              });
+
+              return;
+            }
+
+            var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+
+            // TODO: 이체하기 화면의 url을 이곳에 작성해주세요. `savingsAccountId`, `loginKey`, `partnerUserId`는 필수이며, 그 외에 함께 전달하고 싶은 쿼리 파라미터가 있으면 추가해주세요.
+            var url =
+              MZS_ORIGIN +
+              PATHNAME +
+              tossUtils.createQueryString({
+                savingsAccountId: '',
+                loginKey: '',
+                partnerUserId: '',
+                cmd: 'transferStart',
+              });
+
+            tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+          },
+          // 채우기 핸들러
+          onFillButtonClick: function (params) {
+            window.location.href = tossUtils.createSupertossLab(TOSS_BANK_ORIGIN + '/send', {
+              pathParams: {
+                referrer: 'MZS',
+                accountNo: '입금계좌번호',
+                bankCode: '입금은행코드',
+                accountNoFrom: '출금계좌번호',
+                bankCodeFrom: '출금은행코드',
+              },
+              showBridge: true,
+              bridgeType: 'bank',
+              transparentNavBarType: 'adaptive',
+            });
+          },
+          // TODO: 화면 진입 직후에 보여질 탭 ('PRODUCT' | 'STOCK' | 'BREAKDOWN')
+          initialTab: 'PRODUCT',
+          // TODO: 판매 중인 상품 최고 금리 (쿼리 파라미터로 넘겨받은 `highestInterestRate`를 여기에 넣어주시면 됩니다.)
+          highestInterestRate: 6,
+          // TODO: '메리츠증권 계좌 잔액을 내 토스뱅크에서 바로 보고 싶다면' 클릭 시 보여줄 약관 목록
+          termsList: [
+            {
+              name: '약관명',
+              data: '', // base64 인코딩 처리된 PDF string
+              withArrow: true,
+              required: false,
+            },
+          ],
+          // 동의하고 잔액보기 클릭 이벤트 핸들러
+          onAgreementButtonClick: function (value) {
+            // TODO: 동의하고 잔액 보기 CTA를 클릭했을 때 실행할 로직을 이곳에 작성해주세요.
+            window.location.href = '';
+          },
+          // 동의 안하기 액세서리 버튼 클릭 이벤트 핸들러
+          onDisagreementButtonClick: function () {},
+          // 화면의 visibility 상태가 변경될 때 실행되는 콜백 함수 ((visibilityState: 'hidden' | 'visible') => void)
+          onVisibilityChange: function (visibilityState) {
+            if (visibilityState === 'visible') {
+              // TODO: 토스뱅크로 돈을 보내고 나면, 현재 화면으로 돌아오면서 `onVisibilityChange('visible')`과 같이 호출되는데요.
+              // TODO: 이곳에 계좌 잔액을 갱신하는 로직을 추가해주시면 됩니다.
+            }
+          },
+          // 약관 동의 버텀싯을 띄워야할지 설정합니다.
+          // TODO: 계좌 상세 화면에 첫 진입인 경우, 값을 `true`로 설정해주세요.
+          showAgreementBottomSheet: false,
+          // 상품 탭 관련 데이터
+          product: {
+            // TODO: 주식 총 평가 금액 (number)
+            totalEvaluatedAmount: 13040000,
+            // TODO: 총 수익금 (number)
+            totalEarningsAmount: 210000,
+            // TODO: 총 수익률 (number)
+            totalEarningsRate: 10.21,
+            // TODO: 투자 원금
+            totalInvestmentAmount: 12830000,
+            // `true`일 경우, 상품 탭 하단에 '메리츠증권 계좌 잔액을 내 토스뱅크에서 바로 보고 싶다면' row를 노출합니다.
+            // TODO: 약관 동의 버텀싯에서 약관에 동의하는 경우, 해당 값을 `true`로 변경해주세요.
+            showAgreementSection: true,
+
+            // 추가로 청약하기 row 클릭 이벤트 핸들러
+            onSubscribeMoreClick: function () {
+              // TODO: 목돈 굴리기 홈 화면으로 이동합니다.
+              window.location.href = tossUtils.createSupertossLab(TOSS_BANK_ORIGIN + '/ipo', {
+                pathParams: { referrer: 'MZS' },
+                showBridge: true,
+                bridgeType: 'bank',
+              });
+            },
+            // 투자 중인 상품이 없을 때 쵀대 연 N% 상품 보기 버튼 클릭 이벤트 핸들러
+            onFindMoreButtonClick: function () {
+              // TODO: 상품 둘러보기를 클릭했을 때 실행할 로직을 이곳에 작성해주세요.
+              // 목돈 굴리기 홈 화면으로 이동합니다.
+              window.location.href = tossUtils.createSupertossLab(TOSS_BANK_ORIGIN + '/wealth-management', {
+                pathParams: { referrer: 'MZS' },
+                showBridge: true,
+                bridgeType: 'bank',
+              });
+            },
+            // TODO: '투자중' 탭에 보여질 투자중인 상품 목록. 값이 `null`일 경우 로딩 스켈레톤이 표시됩니다.
+            products: [
+              {
+                id: 0, // 상품 ID (number | string)
+                productType: 'bill', // 상품 타입 ('bill' | 'bond' | 'foreign-bond' | 'other')
+                productName: '발행어음', // 상품 이름 (string),
+                investmentAmount: 500000, // 투자 금액 (number)
+                earningsAmount: 10100, // 수익금 (number)
+                earningsRate: 19.3, // 수익률 (number)
+                description: '1년 1개월 남음', // 설명 (string)
+                iconUrl: 'https://static.toss.im/icons/png/4x/icon-money-grey-list-fill.png', // 아이콘 URL (string)
+                onClick: function () {
+                  // 클릭 이벤트 핸들러
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 1,
+                productType: 'bond',
+                productName: '신한은행',
+                investmentAmount: 2950000,
+                earningsAmount: -1800,
+                earningsRate: -2.5,
+                description: '11개월 남음',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icn-bank-fill-shinhan.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 2,
+                productType: 'foreign-bond',
+                productName: '해외채권',
+                investmentAmount: 0,
+                earningsAmount: null, // productType이 'foreign-bond' 일 경우에는, null | undefined 일 수 있습니다.
+                earningsRate: null, // productType이 'foreign-bond' 일 경우에는, null | undefined 일 수 있습니다.
+                description: '$1,234 구매대기',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icn-bank-fill-shinhan.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 3,
+                productType: 'foreign-bond',
+                productName: '해외채권',
+                investmentAmount: 2950000,
+                earningsAmount: null,
+                earningsRate: null,
+                bottomRightText: '$123,400', // productType이 'foreign-bond'인 경우에만 존재하는 필드입니다. earningsAmount, earningsRate가 null인 경우에 화면에 표시됩니다. (string | undefined | null)
+                description: '판매예약',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icn-bank-fill-shinhan.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 4,
+                productType: 'foreign-bond',
+                productName: '해외채권',
+                investmentAmount: 2950000,
+                earningsAmount: -1800,
+                earningsRate: -2.5,
+                description: '11개월 12일 남음',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icn-bank-fill-shinhan.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 5,
+                productType: 'bill',
+                productName: '발행어음',
+                investmentAmount: 1230000,
+                earningsAmount: 10100,
+                earningsRate: 19.3,
+                description: '8개월 남음',
+                iconUrl: 'https://static.toss.im/png-icons/securities/icn-sec-fill-000060.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+              {
+                id: 6,
+                productType: 'other',
+                productName: '종목명',
+                investmentAmount: 230000,
+                earningsAmount: 340,
+                earningsRate: 1.2,
+                description: 'RP',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icon-bank-fill.png',
+              },
+              {
+                id: 7,
+                productType: 'elb',
+                productName: 'ELB 1000호',
+                investmentAmount: 720000,
+                earningsAmount: 13904,
+                earningsRate: 12.7,
+                description: '4년 13일 남음',
+                iconUrl: 'https://static.toss.im/icons/png/4x/icon-bank-fill.png',
+                onClick: function () {
+                  var host = isProductionEnvironment ? MZS_PRODUCTION_ORIGIN : MZS_DEVELOPMENT_ORIGIN;
+                  var PATHNAME = '/channel/tossbank/home/transfer/tossTransferlController.jsp';
+                  // ELB 상품 상세 화면 URL을 알맞게 넣어주세요.
+                  var url =
+                    host +
+                    PATHNAME +
+                    tossUtils.createQueryString({
+                      savingsAccountId: '',
+                      loginKey: '',
+                      partnerUserId: '',
+                      cmd: 'transferStart',
+                    });
+
+                  tossUtils.openMZSWebView(url, { env: isProductionEnvironment ? 'production' : 'development' });
+                },
+              },
+            ],
+          },
+
+          // 내역 탭 관련 데이터
+          breakdown: {
+            breakdowns: [
+              {
+                date: '3월 10일',
+                transactionList: [
+                  {
+                    title: 'ELB 제1576회',
+                    subTitle: '청약확정',
+                    price: 1000000,
+                    totalPrice: 20000000,
+                    icon: null,
+                  },
+                  {
+                    title: 'ELB 제1526회',
+                    subTitle: null,
+                    price: -300000,
+                    totalPrice: 20000000,
+                    icon: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+                  },
+                ],
+              },
+              {
+                date: '3월 9일',
+                transactionList: [
+                  {
+                    title: 'ELB 제1576회',
+                    subTitle: null,
+                    price: 1000000,
+                    totalPrice: 20000000,
+                    icon: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+                  },
+                  {
+                    title: 'ELB 제1526회',
+                    subTitle: null,
+                    price: -300000,
+                    totalPrice: 20000000,
+                    icon: 'https://static.toss.im/2d-emojis/png/4x/u1F3E2.png',
+                  },
+                ],
+              },
+            ],
+          },
+        };
+      })();
+    </script>
+    <script src="./js/1-Account.js" type="module"></script>
+  </body>
+</html>
